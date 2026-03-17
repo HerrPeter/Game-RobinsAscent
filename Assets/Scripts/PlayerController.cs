@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        gameManager = FindObjectOfType<GameManager>();
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     void Update()
