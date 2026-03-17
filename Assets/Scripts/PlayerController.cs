@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 6f;
     public float jumpForce = 12f;
     public float fallThreshold = 6f;
+    public float wrapLeft = -3.5f;
+    public float wrapRight = 3.5f;
 
     private Rigidbody2D rb;
     private float moveInput;
@@ -35,6 +37,15 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < Camera.main.transform.position.y - fallThreshold)
         {
             gameManager.GameOver();
+        }
+
+        if (transform.position.x < wrapLeft)
+        {
+            transform.position = new Vector3(wrapRight, transform.position.y, transform.position.z);
+        }
+        else if (transform.position.x > wrapRight)
+        {
+            transform.position = new Vector3(wrapLeft, transform.position.y, transform.position.z);
         }
     }
 
