@@ -89,11 +89,28 @@ public class PlayerController : MonoBehaviour
   // Handle jumping when colliding with platforms
   void OnCollisionEnter2D(Collision2D collision)
   {
-    if (collision.gameObject.CompareTag("Platform"))
+    TryBounce(collision);
+  }
+
+  void OnCollisionStay2D(Collision2D collision)
+  {
+    TryBounce(collision);
+  }
+
+  void TryBounce(Collision2D collision)
+  {
+    if (!collision.gameObject.CompareTag("Platform"))
+      return;
+
+    if (rb.linearVelocity.y > 0f)
+      return;
+
+    foreach (ContactPoint2D contact in collision.contacts)
     {
-      if (rb.linearVelocity.y <= 0f)
+      if (contact.normal.y > 0.5f)
       {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        return;
       }
     }
   }

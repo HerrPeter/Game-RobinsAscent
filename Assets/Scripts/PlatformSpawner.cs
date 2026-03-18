@@ -8,7 +8,7 @@ public class PlatformSpawner : MonoBehaviour
   public Transform player;
 
   public float spawnY = 0f;
-  public float distanceBetweenPlatforms = 2.2f;
+  public float distanceBetweenPlatforms = 3.2f; // Higher value for more spacing, lower for less spacing
 
   public float leftX = -2.8f;
   public float rightX = 2.8f;
@@ -17,8 +17,8 @@ public class PlatformSpawner : MonoBehaviour
 
   // Enemy spawning variables
   [Range(0f, 1f)]
-  public float enemySpawnChance = 0.3f;
-  public float enemyYOffset = 0.7f;
+  public float enemySpawnChance = 0.1f; // Chance to spawn an enemy on a platform (0 = never, 1 = always)
+  public float enemyYOffset = 0.7f; // Vertical offset to position the enemy on top of the platform
 
   void Start()
   {

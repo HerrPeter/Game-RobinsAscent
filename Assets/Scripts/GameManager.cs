@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Transform player;
 
     [Header("UI")]
-    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI heightText;
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI messageText;
@@ -23,13 +23,20 @@ public class GameManager : MonoBehaviour
     public int requiredCoinsIncreasePerLevel = 2;
 
     [Header("Runtime")]
-    public float maxHeight = 0f;
     public int coinsCollected = 0;
+    public float maxHeightReached = 0f;
     public bool isGameOver = false;
     public bool isTransitioning = false;
 
-    public float CurrentGoalHeight => baseGoalHeight + (currentLevel - 1) * goalHeightIncreasePerLevel;
-    public int CurrentRequiredCoins => baseRequiredCoins + (currentLevel - 1) * requiredCoinsIncreasePerLevel;
+    public float CurrentGoalHeight
+    {
+        get { return baseGoalHeight + (currentLevel - 1) * goalHeightIncreasePerLevel; }
+    }
+
+    public int CurrentRequiredCoins
+    {
+        get { return baseRequiredCoins + (currentLevel - 1) * requiredCoinsIncreasePerLevel; }
+    }
 
     void Awake()
     {
@@ -38,33 +45,38 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (messageText != null)
-            messageText.gameObject.SetActive(false);
-
         if (player != null)
-            maxHeight = player.position.y;
-
-        coinsCollected = 0;
-        UpdateUI();
-    }
-
-    void Update()
-    {
-        if (isGameOver || isTransitioning || player == null)
-            return;
-
-        if (player.position.y > maxHeight)
-            maxHeight = player.position.y;
-
-        if (player.position.y >= CurrentGoalHeight)
         {
-            CheckLevelCompletion();
+            maxHeightReached = player.position.y;
+        }
+
+        if (messageText != null)
+        {
+            messageText.gameObject.SetActive(false);
         }
 
         UpdateUI();
     }
 
-    public void AddCoin(int amount = 1)
+    void Update()
+    {
+        if (player == null || isGameOver || isTransitioning)
+            return;
+
+        if (player.position.y > maxHeightReached)
+        {
+            maxHeightReached = player.position.y;
+        }
+
+        UpdateUI();
+
+        if (maxHeightReached >= CurrentGoalHeight)
+        {
+            CheckLevelCompletion();
+        }
+    }
+
+    public void AddCoin(int amount)
     {
         coinsCollected += amount;
         UpdateUI();
@@ -94,19 +106,25 @@ public class GameManager : MonoBehaviour
             messageText.text = "Level Complete!";
         }
 
-        Invoke(nameof(LoadNextLevelState), 1.5f);
+        Invoke(nameof(AdvanceLevel), 1.5f);
     }
 
-    void LoadNextLevelState()
+    void AdvanceLevel()
     {
         currentLevel++;
         coinsCollected = 0;
-        maxHeight = player.position.y;
-        isTransitioning = false;
+
+        if (player != null)
+        {
+            maxHeightReached = player.position.y;
+        }
 
         if (messageText != null)
+        {
             messageText.gameObject.SetActive(false);
+        }
 
+        isTransitioning = false;
         UpdateUI();
     }
 
@@ -147,13 +165,19 @@ public class GameManager : MonoBehaviour
 
     void UpdateUI()
     {
-        if (scoreText != null)
-            scoreText.text = "Height: " + Mathf.FloorToInt(maxHeight);
+        if (heightText != null)
+        {
+            heightText.text = "Height: " + Mathf.FloorToInt(maxHeightReached) + " / " + Mathf.FloorToInt(CurrentGoalHeight);
+        }
 
         if (coinText != null)
+        {
             coinText.text = "Gold: " + coinsCollected + " / " + CurrentRequiredCoins;
+        }
 
         if (levelText != null)
-            levelText.text = "Level: " + currentLevel + "  Goal: " + Mathf.FloorToInt(CurrentGoalHeight);
+        {
+            levelText.text = "Level: " + currentLevel;
+        }
     }
 }
