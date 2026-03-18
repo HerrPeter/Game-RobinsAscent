@@ -2,50 +2,75 @@ using UnityEngine;
 
 public class PlatformSpawner : MonoBehaviour
 {
-    public GameObject platformPrefab;
-    public Transform player;
+  // Platform spawning variables
+  public GameObject platformPrefab;
+  public GameObject enemyPrefab;
+  public Transform player;
 
-    public float spawnY = 0f;
-    public float distanceBetweenPlatforms = 2.2f;
+  public float spawnY = 0f;
+  public float distanceBetweenPlatforms = 2.2f;
 
-    public float leftX = -2.8f;
-    public float rightX = 2.8f;
+  public float leftX = -2.8f;
+  public float rightX = 2.8f;
 
-    public int startingPlatforms = 10;
+  public int startingPlatforms = 10;
 
-    void Start()
+  // Enemy spawning variables
+  [Range(0f, 1f)]
+  public float enemySpawnChance = 0.3f;
+  public float enemyYOffset = 0.7f;
+
+  void Start()
+  {
+    for (int i = 0; i < startingPlatforms; i++)
     {
-        for (int i = 0; i < startingPlatforms; i++)
-        {
-            SpawnPlatform();
-        }
+      SpawnPlatform();
+    }
+  }
+
+  void Update()
+  {
+    if (player.position.y + 15f > spawnY)
+    {
+      SpawnPlatform();
+    }
+  }
+
+  // Spawns a platform at the current spawnY position, randomly on the left or right side, and optionally spawns an enemy on it
+  void SpawnPlatform()
+  {
+    if (platformPrefab == null)
+    {
+      Debug.LogError("Platform prefab is missing on PlatformSpawner.");
+      return;
     }
 
-    void Update()
+    bool spawnRight = Random.value > 0.5f;
+    float spawnX = spawnRight ? rightX : leftX;
+
+    GameObject newPlatform = Instantiate(
+        platformPrefab,
+        new Vector2(spawnX, spawnY),
+        Quaternion.identity
+    );
+
+    SpriteRenderer sr = newPlatform.GetComponent<SpriteRenderer>();
+    if (sr != null)
     {
-        if (player.position.y + 15f > spawnY)
-        {
-            SpawnPlatform();
-        }
+      sr.flipX = spawnRight;
     }
 
-    void SpawnPlatform()
+    if (enemyPrefab != null && Random.value < enemySpawnChance)
     {
-        bool spawnRight = Random.value > 0.5f;
-        float spawnX = spawnRight ? rightX : leftX;
+      float enemyXOffset = spawnRight ? -0.6f : 0.6f;
 
-        GameObject newPlatform = Instantiate(
-            platformPrefab,
-            new Vector2(spawnX, spawnY),
-            Quaternion.identity
-        );
-
-        SpriteRenderer sr = newPlatform.GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            sr.flipX = spawnRight;
-        }
-
-        spawnY += distanceBetweenPlatforms;
+      Instantiate(
+          enemyPrefab,
+          new Vector2(spawnX + enemyXOffset, spawnY + enemyYOffset),
+          Quaternion.identity
+      );
     }
+
+    spawnY += distanceBetweenPlatforms;
+  }
 }
