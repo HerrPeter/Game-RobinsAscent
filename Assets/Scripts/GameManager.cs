@@ -6,15 +6,18 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    //  Game variables
     [Header("Player")]
     public Transform player;
 
+    //  UI variables
     [Header("UI")]
     public TextMeshProUGUI heightText;
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI messageText;
 
+    //  Level progression variables
     [Header("Level Settings")]
     public int currentLevel = 1;
     public float baseGoalHeight = 50f;
@@ -22,17 +25,20 @@ public class GameManager : MonoBehaviour
     public int baseRequiredCoins = 3;
     public int requiredCoinsIncreasePerLevel = 2;
 
+    //  Runtime variables
     [Header("Runtime")]
     public int coinsCollected = 0;
     public float maxHeightReached = 0f;
     public bool isGameOver = false;
     public bool isTransitioning = false;
 
+    //  Properties to calculate current level goals
     public float CurrentGoalHeight
     {
         get { return baseGoalHeight + (currentLevel - 1) * goalHeightIncreasePerLevel; }
     }
 
+    //  Calculate required coins for current level
     public int CurrentRequiredCoins
     {
         get { return baseRequiredCoins + (currentLevel - 1) * requiredCoinsIncreasePerLevel; }
@@ -43,6 +49,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    //  Initialize game state
     void Start()
     {
         if (player != null)
@@ -58,6 +65,7 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
+    //  Main game loop
     void Update()
     {
         if (player == null || isGameOver || isTransitioning)
@@ -76,12 +84,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //  Method to add coins when collected
     public void AddCoin(int amount)
     {
         coinsCollected += amount;
         UpdateUI();
     }
 
+    //  Check if player has met level completion criteria
     void CheckLevelCompletion()
     {
         if (coinsCollected >= CurrentRequiredCoins)
@@ -94,6 +104,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //  Handle level transition
     void StartNextLevel()
     {
         if (isTransitioning) return;
@@ -109,6 +120,7 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(AdvanceLevel), 1.5f);
     }
 
+    //  Advance to the next level
     void AdvanceLevel()
     {
         currentLevel++;
@@ -128,6 +140,7 @@ public class GameManager : MonoBehaviour
         UpdateUI();
     }
 
+    //  Handle level failure
     void FailLevel()
     {
         if (isGameOver) return;
@@ -143,6 +156,7 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(RestartGame), 1.5f);
     }
 
+    // Handle game over scenario
     public void GameOver()
     {
         if (isGameOver || isTransitioning) return;
@@ -158,11 +172,13 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(RestartGame), 1.5f);
     }
 
+    // Restart the current level
     void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    // Update UI elements with current game state
     void UpdateUI()
     {
         if (heightText != null)
