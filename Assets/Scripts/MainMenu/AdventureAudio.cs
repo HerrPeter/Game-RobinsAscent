@@ -9,7 +9,6 @@ public class AdventureAudio : MonoBehaviour
 
   private AudioSource audioSource;
   private float sampleRate = 44100f;
-  private float frequency = 440f;
 
   void Start()
   {
