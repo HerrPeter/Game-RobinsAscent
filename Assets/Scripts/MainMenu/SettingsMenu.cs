@@ -47,6 +47,8 @@ public class SettingsMenu : MonoBehaviour
     PlayerPrefs.SetFloat("MusicVolume", value);
     PlayerPrefs.Save();
 
+    AudioListener.volume = value; // 👈 global volume control
+
     Debug.Log("Music Volume: " + value.ToString("F2"));
   }
 
