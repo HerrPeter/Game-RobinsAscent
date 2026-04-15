@@ -27,6 +27,7 @@ public class SettingsMenu : MonoBehaviour
     if (fullscreenToggle != null)
       fullscreenToggle.isOn = savedFullscreen == 1;
 
+    AudioListener.volume = savedMusic;
     ApplyFullscreen(savedFullscreen == 1);
   }
 

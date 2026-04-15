@@ -20,16 +20,24 @@ public class PlatformSpawner : MonoBehaviour
   public float enemySpawnChance = 0.1f; // Chance to spawn an enemy on a platform (0 = never, 1 = always)
   public float enemyYOffset = 0.7f; // Vertical offset to position the enemy on top of the platform
 
+  private bool hasSpawnedInitialSet = false;
+
   void Start()
   {
-    for (int i = 0; i < startingPlatforms; i++)
-    {
-      SpawnPlatform();
-    }
   }
 
   void Update()
   {
+    if (!hasSpawnedInitialSet)
+    {
+      return;
+    }
+
+    if (player == null)
+    {
+      return;
+    }
+
     if (player.position.y + 15f > spawnY)
     {
       SpawnPlatform();
@@ -72,5 +80,32 @@ public class PlatformSpawner : MonoBehaviour
     }
 
     spawnY += distanceBetweenPlatforms;
+  }
+
+  public void ApplyLevelSettings(GameManager.LevelDefinition level)
+  {
+    if (level == null)
+    {
+      return;
+    }
+
+    distanceBetweenPlatforms = level.platformSpacing;
+    startingPlatforms = level.startingPlatforms;
+    enemySpawnChance = level.enemySpawnChance;
+  }
+
+  public void SpawnInitialPlatforms()
+  {
+    if (hasSpawnedInitialSet)
+    {
+      return;
+    }
+
+    for (int i = 0; i < startingPlatforms; i++)
+    {
+      SpawnPlatform();
+    }
+
+    hasSpawnedInitialSet = true;
   }
 }
