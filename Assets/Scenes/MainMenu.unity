@@ -720,6 +720,7 @@ GameObject:
   - component: {fileID: 355450670}
   - component: {fileID: 355450669}
   - component: {fileID: 355450668}
+  - component: {fileID: 355450672}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -779,6 +780,20 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355450667}
   m_Enabled: 1
+--- !u!114 &355450672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355450667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f7b59ec2a34d1ea378124f33de7d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AspectRatioLetterbox
+  targetWidth: 9
+  targetHeight: 16
 --- !u!20 &355450670
 Camera:
   m_ObjectHideFlags: 0
@@ -2113,7 +2128,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 2108147106}
         m_TargetAssemblyTypeName: SettingsMenu, Assembly-CSharp
         m_MethodName: SetFullscreen
         m_Mode: 6
@@ -3286,12 +3301,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -3336,9 +3351,9 @@ RectTransform:
   - {fileID: 331825256}
   - {fileID: 571844013}
   - {fileID: 1802738320}
-  - {fileID: 1551604357}
   - {fileID: 1570902152}
   - {fileID: 934974001}
+  - {fileID: 1551604357}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

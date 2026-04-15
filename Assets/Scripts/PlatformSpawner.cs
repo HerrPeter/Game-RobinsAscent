@@ -9,7 +9,6 @@ public class PlatformSpawner : MonoBehaviour
 
   public float spawnY = 0f;
   public float distanceBetweenPlatforms = 3.2f; // Higher value for more spacing, lower for less spacing
-
   public float leftX = -2.8f;
   public float rightX = 2.8f;
 

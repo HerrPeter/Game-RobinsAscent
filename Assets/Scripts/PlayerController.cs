@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+  private const string SfxVolumeKey = "SFXVolume";
+
   // Movement variables
   public float moveSpeed = 6f;
   public float jumpForce = 12f;
@@ -22,6 +24,8 @@ public class PlayerController : MonoBehaviour
   private float moveInput;
   private GameManager gameManager;
   private SpriteRenderer sr;
+  private AudioSource sfxSource;
+  private AudioClip shootClip;
 
   // Initialize references
   void Start()
@@ -29,6 +33,17 @@ public class PlayerController : MonoBehaviour
     rb = GetComponent<Rigidbody2D>();
     gameManager = FindFirstObjectByType<GameManager>();
     sr = GetComponent<SpriteRenderer>();
+    sfxSource = GetComponent<AudioSource>();
+
+    if (sfxSource == null)
+    {
+      sfxSource = gameObject.AddComponent<AudioSource>();
+    }
+
+    sfxSource.playOnAwake = false;
+    sfxSource.loop = false;
+    sfxSource.spatialBlend = 0f;
+    shootClip = CreateShootClip();
   }
 
   //  Handle player input and movement, as well as screen wrapping and shooting
@@ -55,14 +70,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Handle screen wrapping
-    if (transform.position.x < wrapLeft)
-    {
-      transform.position = new Vector3(wrapRight, transform.position.y, transform.position.z);
-    }
-    else if (transform.position.x > wrapRight)
-    {
-      transform.position = new Vector3(wrapLeft, transform.position.y, transform.position.z);
-    }
+    HandleScreenWrap();
 
     // Flip sprite based on direction
     if (moveInput > 0)
@@ -126,6 +134,55 @@ public class PlayerController : MonoBehaviour
     if (arrow != null)
     {
       arrow.SetDirection(facingLeft);
+    }
+
+    PlayShootSound();
+  }
+
+  void PlayShootSound()
+  {
+    if (sfxSource == null || shootClip == null)
+    {
+      return;
+    }
+
+    float sfxVolume = PlayerPrefs.GetFloat(SfxVolumeKey, 1f);
+    sfxSource.volume = Mathf.Clamp01(sfxVolume);
+    sfxSource.PlayOneShot(shootClip, sfxSource.volume);
+  }
+
+  AudioClip CreateShootClip()
+  {
+    const int sampleRate = 44100;
+    const float duration = 0.09f;
+    int sampleCount = Mathf.CeilToInt(sampleRate * duration);
+    float[] samples = new float[sampleCount];
+
+    for (int i = 0; i < sampleCount; i++)
+    {
+      float t = (float)i / sampleRate;
+      float progress = (float)i / sampleCount;
+      float pitch = Mathf.Lerp(1400f, 650f, progress);
+      float envelope = (1f - progress) * (1f - progress);
+      float tone = Mathf.Sin(2f * Mathf.PI * pitch * t);
+
+      samples[i] = tone * envelope * 0.18f;
+    }
+
+    AudioClip clip = AudioClip.Create("ArrowShoot", sampleCount, 1, sampleRate, false);
+    clip.SetData(samples, 0);
+    return clip;
+  }
+
+  void HandleScreenWrap()
+  {
+    if (transform.position.x < wrapLeft)
+    {
+      transform.position = new Vector3(wrapRight, transform.position.y, transform.position.z);
+    }
+    else if (transform.position.x > wrapRight)
+    {
+      transform.position = new Vector3(wrapLeft, transform.position.y, transform.position.z);
     }
   }
 }

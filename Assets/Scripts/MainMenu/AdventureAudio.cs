@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class AdventureAudio : MonoBehaviour
 {
+  private const string MusicVolumeKey = "MusicVolume";
   private static AdventureAudio instance;
 
   public float volume = 0.2f;
@@ -15,7 +16,7 @@ public class AdventureAudio : MonoBehaviour
     audioSource = GetComponent<AudioSource>();
     audioSource.loop = true;
     audioSource.playOnAwake = true;
-    audioSource.volume = volume;
+    ApplySavedVolume();
 
     audioSource.clip = CreateTone();
     audioSource.Play();
@@ -31,6 +32,22 @@ public class AdventureAudio : MonoBehaviour
 
     instance = this;
     DontDestroyOnLoad(gameObject);
+  }
+
+  public static void SetMusicVolume(float value)
+  {
+    if (instance == null || instance.audioSource == null)
+    {
+      return;
+    }
+
+    instance.audioSource.volume = Mathf.Clamp01(value);
+  }
+
+  void ApplySavedVolume()
+  {
+    float savedVolume = PlayerPrefs.GetFloat(MusicVolumeKey, volume);
+    audioSource.volume = Mathf.Clamp01(savedVolume);
   }
 
   AudioClip CreateTone()

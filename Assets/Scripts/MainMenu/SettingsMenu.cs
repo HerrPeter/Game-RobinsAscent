@@ -3,11 +3,17 @@ using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
 {
+  private const int PortraitReferenceWidth = 1080;
+  private const int PortraitReferenceHeight = 1920;
+
   public GameObject settingsPanel;
 
   public Slider musicSlider;
   public Slider sfxSlider;
   public Toggle fullscreenToggle;
+
+  private int windowedWidth = 608;
+  private int windowedHeight = 1080;
 
   void Start()
   {
@@ -16,7 +22,7 @@ public class SettingsMenu : MonoBehaviour
 
     float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 1f);
     float savedSfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
-    int savedFullscreen = PlayerPrefs.GetInt("Fullscreen", 1);
+    int savedFullscreen = PlayerPrefs.GetInt("Fullscreen", 0);
 
     if (musicSlider != null)
       musicSlider.value = savedMusic;
@@ -25,9 +31,13 @@ public class SettingsMenu : MonoBehaviour
       sfxSlider.value = savedSfx;
 
     if (fullscreenToggle != null)
-      fullscreenToggle.isOn = savedFullscreen == 1;
+    {
+      fullscreenToggle.onValueChanged.RemoveListener(SetFullscreen);
+      fullscreenToggle.SetIsOnWithoutNotify(savedFullscreen == 1);
+      fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
+    }
 
-    AudioListener.volume = savedMusic;
+    AdventureAudio.SetMusicVolume(savedMusic);
     ApplyFullscreen(savedFullscreen == 1);
   }
 
@@ -48,7 +58,7 @@ public class SettingsMenu : MonoBehaviour
     PlayerPrefs.SetFloat("MusicVolume", value);
     PlayerPrefs.Save();
 
-    AudioListener.volume = value; // 👈 global volume control
+    AdventureAudio.SetMusicVolume(value);
 
     Debug.Log("Music Volume: " + value.ToString("F2"));
   }
@@ -71,6 +81,44 @@ public class SettingsMenu : MonoBehaviour
 
   void ApplyFullscreen(bool isFullscreen)
   {
-    Screen.fullScreen = isFullscreen;
+    if (isFullscreen)
+    {
+      if (Screen.fullScreenMode == FullScreenMode.Windowed)
+      {
+        windowedWidth = Screen.width;
+        windowedHeight = Screen.height;
+      }
+
+      Resolution displayResolution = Screen.currentResolution;
+      Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+      Screen.fullScreen = true;
+      Screen.SetResolution(displayResolution.width, displayResolution.height, true);
+      return;
+    }
+
+    SetPortraitWindowSize();
+
+    Screen.fullScreen = false;
+    Screen.fullScreenMode = FullScreenMode.Windowed;
+    Screen.SetResolution(windowedWidth, windowedHeight, false);
+  }
+
+  void SetPortraitWindowSize()
+  {
+    Resolution displayResolution = Screen.currentResolution;
+    int maxHeight = Mathf.Max(720, displayResolution.height - 120);
+
+    windowedHeight = Mathf.Min(PortraitReferenceHeight, maxHeight);
+    windowedWidth = Mathf.RoundToInt(windowedHeight * (9f / 16f));
+
+    if (windowedWidth <= 0)
+    {
+      windowedWidth = PortraitReferenceWidth;
+    }
+
+    if (windowedHeight <= 0)
+    {
+      windowedHeight = PortraitReferenceHeight;
+    }
   }
 }
