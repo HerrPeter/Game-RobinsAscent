@@ -15,10 +15,14 @@ public class SettingsMenu : MonoBehaviour
   private int windowedWidth = 608;
   private int windowedHeight = 1080;
 
+  void Awake()
+  {
+    HideSettingsPanel();
+  }
+
   void Start()
   {
-    if (settingsPanel != null)
-      settingsPanel.SetActive(false);
+    HideSettingsPanel();
 
     float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 1f);
     float savedSfx = PlayerPrefs.GetFloat("SFXVolume", 1f);
@@ -49,8 +53,7 @@ public class SettingsMenu : MonoBehaviour
 
   public void CloseSettings()
   {
-    if (settingsPanel != null)
-      settingsPanel.SetActive(false);
+    HideSettingsPanel();
   }
 
   public void SetMusicVolume(float value)
@@ -120,5 +123,11 @@ public class SettingsMenu : MonoBehaviour
     {
       windowedHeight = PortraitReferenceHeight;
     }
+  }
+
+  void HideSettingsPanel()
+  {
+    if (settingsPanel != null)
+      settingsPanel.SetActive(false);
   }
 }

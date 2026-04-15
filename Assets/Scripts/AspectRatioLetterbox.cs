@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[ExecuteAlways]
 [RequireComponent(typeof(Camera))]
 public class AspectRatioLetterbox : MonoBehaviour
 {
@@ -8,6 +7,10 @@ public class AspectRatioLetterbox : MonoBehaviour
     public float targetHeight = 16f;
 
     private Camera attachedCamera;
+    private int lastScreenWidth = -1;
+    private int lastScreenHeight = -1;
+    private float lastTargetWidth = -1f;
+    private float lastTargetHeight = -1f;
 
     void Awake()
     {
@@ -25,9 +28,15 @@ public class AspectRatioLetterbox : MonoBehaviour
         ApplyViewport();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        ApplyViewport();
+        if (Screen.width != lastScreenWidth ||
+            Screen.height != lastScreenHeight ||
+            !Mathf.Approximately(targetWidth, lastTargetWidth) ||
+            !Mathf.Approximately(targetHeight, lastTargetHeight))
+        {
+            ApplyViewport();
+        }
     }
 
     void ApplyViewport()
@@ -41,6 +50,11 @@ public class AspectRatioLetterbox : MonoBehaviour
         {
             return;
         }
+
+        lastScreenWidth = Screen.width;
+        lastScreenHeight = Screen.height;
+        lastTargetWidth = targetWidth;
+        lastTargetHeight = targetHeight;
 
         float targetAspect = targetWidth / targetHeight;
         float windowAspect = (float)Screen.width / Mathf.Max(1, Screen.height);

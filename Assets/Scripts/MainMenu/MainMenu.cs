@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour
 {
@@ -9,6 +10,17 @@ public class MainMenu : MonoBehaviour
 
   void Start()
   {
+    SettingsMenu settingsMenu = FindFirstObjectByType<SettingsMenu>();
+    if (settingsMenu != null)
+    {
+      settingsMenu.CloseSettings();
+    }
+
+    if (EventSystem.current != null)
+    {
+      EventSystem.current.SetSelectedGameObject(null);
+    }
+
     RefreshSavedLevelText();
   }
 

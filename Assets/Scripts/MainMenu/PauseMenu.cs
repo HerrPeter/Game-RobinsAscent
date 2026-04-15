@@ -45,6 +45,12 @@ public class PauseMenu : MonoBehaviour
 
   public void GoToMainMenu()
   {
+    isPaused = false;
+    if (pausePanel != null)
+    {
+      pausePanel.SetActive(false);
+    }
+
     Time.timeScale = 1f;
     SceneManager.LoadScene("MainMenu");
   }
