@@ -392,6 +392,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 1037929817646699420, guid: df9dcc5a0a3519d40855b5e3e1333994, type: 3}
   firePoint: {fileID: 1256283660}
   shootCooldown: 0.2
+  arrowShootClip: {fileID: 8300000, guid: a119200235c90ab45a39321d242e1852, type: 3}
 --- !u!1 &215657127
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,9 +449,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.42116368
     y: 0
-    width: 1
+    width: 0.15767263
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -1546,6 +1547,7 @@ MonoBehaviour:
   leftX: -2.8
   rightX: 2.8
   startingPlatforms: 12
+  maxSameSideStreak: 2
   enemySpawnChance: 0.3
   enemyYOffset: 0.7
 --- !u!1 &1378914960

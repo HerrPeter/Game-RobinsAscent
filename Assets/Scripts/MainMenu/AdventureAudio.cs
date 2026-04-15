@@ -6,6 +6,7 @@ public class AdventureAudio : MonoBehaviour
   private const string MusicVolumeKey = "MusicVolume";
   private static AdventureAudio instance;
 
+  public AudioClip musicClip;
   public float volume = 0.2f;
 
   private AudioSource audioSource;
@@ -18,8 +19,12 @@ public class AdventureAudio : MonoBehaviour
     audioSource.playOnAwake = true;
     ApplySavedVolume();
 
-    audioSource.clip = CreateTone();
-    audioSource.Play();
+    audioSource.clip = musicClip != null ? musicClip : CreateTone();
+
+    if (!audioSource.isPlaying)
+    {
+      audioSource.Play();
+    }
   }
 
   void Awake()

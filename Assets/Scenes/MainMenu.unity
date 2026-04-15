@@ -780,20 +780,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355450667}
   m_Enabled: 1
---- !u!114 &355450672
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 355450667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21f7b59ec2a34d1ea378124f33de7d45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AspectRatioLetterbox
-  targetWidth: 9
-  targetHeight: 16
 --- !u!20 &355450670
 Camera:
   m_ObjectHideFlags: 0
@@ -821,9 +807,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.42116368
     y: 0
-    width: 1
+    width: 0.15767263
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -860,6 +846,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &355450672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355450667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f7b59ec2a34d1ea378124f33de7d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AspectRatioLetterbox
+  targetWidth: 9
+  targetHeight: 16
 --- !u!1 &405308115
 GameObject:
   m_ObjectHideFlags: 0
@@ -3917,6 +3917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f6b3fc9d7a6e004d9a22f0d4bd3742d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdventureAudio
+  musicClip: {fileID: 8300000, guid: c0bb9b18f3b40bd4e9b13d5a1c79c760, type: 3}
   volume: 0.2
 --- !u!82 &2034070156
 AudioSource:
