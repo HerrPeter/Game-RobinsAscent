@@ -15,12 +15,18 @@ public class PlatformSpawner : MonoBehaviour
 
   public int startingPlatforms = 10;
 
+  [Header("Side Variety")]
+  public int maxSameSideStreak = 2;
+
   // Enemy spawning variables
   [Range(0f, 1f)]
   public float enemySpawnChance = 0.1f; // Chance to spawn an enemy on a platform (0 = never, 1 = always)
   public float enemyYOffset = 0.7f; // Vertical offset to position the enemy on top of the platform
 
   private bool hasSpawnedInitialSet = false;
+  private bool hasLastSide;
+  private bool lastSpawnWasRight;
+  private int sameSideStreak = 0;
 
   void Start()
   {
@@ -53,7 +59,7 @@ public class PlatformSpawner : MonoBehaviour
       return;
     }
 
-    bool spawnRight = Random.value > 0.5f;
+    bool spawnRight = ChooseSpawnSide();
     float spawnX = spawnRight ? rightX : leftX;
 
     GameObject newPlatform = Instantiate(
@@ -80,6 +86,36 @@ public class PlatformSpawner : MonoBehaviour
     }
 
     spawnY += distanceBetweenPlatforms;
+  }
+
+  bool ChooseSpawnSide()
+  {
+    bool spawnRight = Random.value > 0.5f;
+
+    if (!hasLastSide)
+    {
+      hasLastSide = true;
+      lastSpawnWasRight = spawnRight;
+      sameSideStreak = 1;
+      return spawnRight;
+    }
+
+    if (sameSideStreak >= maxSameSideStreak && spawnRight == lastSpawnWasRight)
+    {
+      spawnRight = !lastSpawnWasRight;
+    }
+
+    if (spawnRight == lastSpawnWasRight)
+    {
+      sameSideStreak++;
+    }
+    else
+    {
+      lastSpawnWasRight = spawnRight;
+      sameSideStreak = 1;
+    }
+
+    return spawnRight;
   }
 
   public void ApplyLevelSettings(GameManager.LevelDefinition level)

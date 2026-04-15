@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     private PlatformSpawner platformSpawner;
     private GameProgressData progressData;
     private LevelDefinition currentLevelData;
+    private float startingHeight = 0f;
 
     //  Properties to calculate current level goals
     public float CurrentGoalHeight
@@ -91,7 +92,8 @@ public class GameManager : MonoBehaviour
 
         if (player != null)
         {
-            maxHeightReached = player.position.y;
+            startingHeight = player.position.y;
+            maxHeightReached = 0f;
         }
 
         if (messageText != null)
@@ -108,9 +110,11 @@ public class GameManager : MonoBehaviour
         if (player == null || isGameOver || isTransitioning)
             return;
 
-        if (player.position.y > maxHeightReached)
+        float currentHeight = GetCurrentHeight();
+
+        if (currentHeight > maxHeightReached)
         {
-            maxHeightReached = player.position.y;
+            maxHeightReached = currentHeight;
         }
 
         UpdateUI();
@@ -204,6 +208,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    float GetCurrentHeight()
+    {
+        if (player == null)
+        {
+            return 0f;
+        }
+
+        return Mathf.Max(0f, player.position.y - startingHeight);
+    }
+
     void LoadFollowingScene()
     {
         isTransitioning = false;
@@ -249,11 +263,11 @@ public class GameManager : MonoBehaviour
     {
         return new LevelDefinition[]
         {
-            new LevelDefinition { levelName = "Forest Edge", goalHeight = 45f, requiredCoins = 2, platformSpacing = 3f, startingPlatforms = 10, enemySpawnChance = 0.10f },
-            new LevelDefinition { levelName = "Briar Climb", goalHeight = 70f, requiredCoins = 3, platformSpacing = 3.15f, startingPlatforms = 12, enemySpawnChance = 0.18f },
-            new LevelDefinition { levelName = "Bandit Lookout", goalHeight = 95f, requiredCoins = 4, platformSpacing = 3.3f, startingPlatforms = 14, enemySpawnChance = 0.24f },
-            new LevelDefinition { levelName = "High Canopy", goalHeight = 120f, requiredCoins = 5, platformSpacing = 3.45f, startingPlatforms = 16, enemySpawnChance = 0.30f },
-            new LevelDefinition { levelName = "Castle Approach", goalHeight = 145f, requiredCoins = 6, platformSpacing = 3.6f, startingPlatforms = 18, enemySpawnChance = 0.36f }
+            new LevelDefinition { levelName = "Forest Edge", goalHeight = 45f, requiredCoins = 2, platformSpacing = 3f, startingPlatforms = 10, enemySpawnChance = 0.22f },
+            new LevelDefinition { levelName = "Briar Climb", goalHeight = 70f, requiredCoins = 3, platformSpacing = 3.15f, startingPlatforms = 12, enemySpawnChance = 0.30f },
+            new LevelDefinition { levelName = "Bandit Lookout", goalHeight = 95f, requiredCoins = 4, platformSpacing = 3.3f, startingPlatforms = 14, enemySpawnChance = 0.38f },
+            new LevelDefinition { levelName = "High Canopy", goalHeight = 120f, requiredCoins = 5, platformSpacing = 3.45f, startingPlatforms = 16, enemySpawnChance = 0.45f },
+            new LevelDefinition { levelName = "Castle Approach", goalHeight = 145f, requiredCoins = 6, platformSpacing = 3.6f, startingPlatforms = 18, enemySpawnChance = 0.52f }
         };
     }
 }
