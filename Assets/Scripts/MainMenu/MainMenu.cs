@@ -7,21 +7,24 @@ public class MainMenu : MonoBehaviour
 {
   public int totalLevels = 5;
   public TextMeshProUGUI savedLevelText;
+  private SettingsMenu settingsMenu;
+
+  void Awake()
+  {
+    settingsMenu = FindFirstObjectByType<SettingsMenu>();
+    HideSettingsOverlay();
+  }
 
   void Start()
   {
-    SettingsMenu settingsMenu = FindFirstObjectByType<SettingsMenu>();
-    if (settingsMenu != null)
-    {
-      settingsMenu.CloseSettings();
-    }
-
-    if (EventSystem.current != null)
-    {
-      EventSystem.current.SetSelectedGameObject(null);
-    }
-
+    ClearSelection();
     RefreshSavedLevelText();
+  }
+
+  void OnEnable()
+  {
+    HideSettingsOverlay();
+    ClearSelection();
   }
 
   public void PlayGame()
@@ -60,6 +63,27 @@ public class MainMenu : MonoBehaviour
   {
     GameProgressService.Reset(totalLevels);
     RefreshSavedLevelText();
+  }
+
+  void HideSettingsOverlay()
+  {
+    if (settingsMenu == null)
+    {
+      settingsMenu = FindFirstObjectByType<SettingsMenu>();
+    }
+
+    if (settingsMenu != null)
+    {
+      settingsMenu.CloseSettings();
+    }
+  }
+
+  void ClearSelection()
+  {
+    if (EventSystem.current != null)
+    {
+      EventSystem.current.SetSelectedGameObject(null);
+    }
   }
 
   void RefreshSavedLevelText()

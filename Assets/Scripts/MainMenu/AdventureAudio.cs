@@ -12,31 +12,35 @@ public class AdventureAudio : MonoBehaviour
   private AudioSource audioSource;
   private float sampleRate = 44100f;
 
-  void Start()
-  {
-    audioSource = GetComponent<AudioSource>();
-    audioSource.loop = true;
-    audioSource.playOnAwake = true;
-    ApplySavedVolume();
-
-    audioSource.clip = musicClip != null ? musicClip : CreateTone();
-
-    if (!audioSource.isPlaying)
-    {
-      audioSource.Play();
-    }
-  }
-
   void Awake()
   {
-    if (instance != null)
+    audioSource = GetComponent<AudioSource>();
+
+    if (instance != null && instance != this)
     {
+      if (musicClip != null)
+      {
+        instance.SetClipAndPlay(musicClip);
+      }
+
       Destroy(gameObject);
       return;
     }
 
     instance = this;
     DontDestroyOnLoad(gameObject);
+    audioSource.loop = true;
+    audioSource.playOnAwake = true;
+    ApplySavedVolume();
+    SetClipAndPlay(musicClip != null ? musicClip : CreateTone());
+  }
+
+  void Start()
+  {
+    if (musicClip != null)
+    {
+      SetClipAndPlay(musicClip);
+    }
   }
 
   public static void SetMusicVolume(float value)
@@ -53,6 +57,24 @@ public class AdventureAudio : MonoBehaviour
   {
     float savedVolume = PlayerPrefs.GetFloat(MusicVolumeKey, volume);
     audioSource.volume = Mathf.Clamp01(savedVolume);
+  }
+
+  void SetClipAndPlay(AudioClip clip)
+  {
+    if (audioSource == null || clip == null)
+    {
+      return;
+    }
+
+    if (audioSource.clip != clip)
+    {
+      audioSource.clip = clip;
+    }
+
+    if (!audioSource.isPlaying)
+    {
+      audioSource.Play();
+    }
   }
 
   AudioClip CreateTone()
