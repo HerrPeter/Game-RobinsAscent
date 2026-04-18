@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
   public GameObject arrowPrefab;
   public Transform firePoint;
   public float shootCooldown = 0.1f;  // Lower value for faster shooting, higher for slower shooting
+  public AudioClip arrowShootClip;
 
   // Internal variables
   private float shootTimer = 0f;
@@ -43,7 +44,12 @@ public class PlayerController : MonoBehaviour
     sfxSource.playOnAwake = false;
     sfxSource.loop = false;
     sfxSource.spatialBlend = 0f;
-    shootClip = CreateShootClip();
+    shootClip = arrowShootClip;
+
+    if (shootClip == null)
+    {
+      shootClip = CreateShootClip();
+    }
   }
 
   //  Handle player input and movement, as well as screen wrapping and shooting

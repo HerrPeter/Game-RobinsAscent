@@ -12,6 +12,7 @@ public class AspectRatioLetterbox : MonoBehaviour
     private float lastTargetWidth = -1f;
     private float lastTargetHeight = -1f;
 
+// Initialize the camera reference and apply the viewport settings
     void Awake()
     {
         attachedCamera = GetComponent<Camera>();
@@ -28,6 +29,7 @@ public class AspectRatioLetterbox : MonoBehaviour
         ApplyViewport();
     }
 
+// Check for screen size or target aspect ratio changes and update the viewport if needed
     void LateUpdate()
     {
         if (Screen.width != lastScreenWidth ||
@@ -39,6 +41,7 @@ public class AspectRatioLetterbox : MonoBehaviour
         }
     }
 
+// Display the letterbox by adjusting the camera's viewport rect
     void ApplyViewport()
     {
         if (attachedCamera == null)
