@@ -208,6 +208,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    // Returns the current height of the player
     float GetCurrentHeight()
     {
         if (player == null)
@@ -218,6 +219,7 @@ public class GameManager : MonoBehaviour
         return Mathf.Max(0f, player.position.y - startingHeight);
     }
 
+    // Load the next level or return to main menu if all levels are completed
     void LoadFollowingScene()
     {
         isTransitioning = false;
@@ -259,6 +261,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Builds a default set of levels with increasing difficulty, providing a structured progression for players as they advance through the game, with each level introducing higher goals and more challenging platform arrangements and enemy spawn rates.
     LevelDefinition[] BuildDefaultLevels()
     {
         return new LevelDefinition[]

@@ -12,12 +12,14 @@ public class Enemy : MonoBehaviour
   private Vector3 startPosition;
   private float animationOffset;
 
+  // Initializes the enemy's starting position and assigns a random animation offset to create variation in the bobbing and swaying motion among multiple enemies, making their movements appear more natural and less synchronized.
   void Start()
   {
     startPosition = transform.position;
     animationOffset = Random.Range(0f, Mathf.PI * 2f);
   }
 
+  // Updates the enemy's position and rotation to create a bobbing and swaying motion, making the enemy appear more dynamic and visually interesting as it moves up and down while also gently rotating back and forth.
   void Update()
   {
     float bobOffset = Mathf.Sin((Time.time * bobSpeed) + animationOffset) * bobHeight;
@@ -27,7 +29,7 @@ public class Enemy : MonoBehaviour
     transform.rotation = Quaternion.Euler(0f, 0f, swayOffset);
   }
 
-  // Call this method when the enemy is defeated
+  // Calls this method when the enemy is defeated
   public void Die()
   {
     if (coinPrefab != null)

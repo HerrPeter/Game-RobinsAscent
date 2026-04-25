@@ -11,6 +11,7 @@ public class AdventureAudio : MonoBehaviour
 
   private AudioSource audioSource;
 
+  // Assigns the music clip and starts playing it, ensuring that only one instance of AdventureAudio exists across scenes.
   void Awake()
   {
     audioSource = GetComponent<AudioSource>();
@@ -41,7 +42,7 @@ public class AdventureAudio : MonoBehaviour
       SetClipAndPlay(musicClip);
     }
   }
-
+  // Sets the music volume based on the provided slider value, converting it to the appropriate source volume using the AudioVolumeUtility.
   public static void SetMusicVolume(float value)
   {
     if (instance == null || instance.audioSource == null)
@@ -52,12 +53,14 @@ public class AdventureAudio : MonoBehaviour
     instance.audioSource.volume = AudioVolumeUtility.SliderToSourceVolume(value);
   }
 
+  // Load the saved music volume from PlayerPrefs and apply it to the audio source, ensuring that the volume is consistent with the user's previous settings.
   void ApplySavedVolume()
   {
     float savedVolume = PlayerPrefs.GetFloat(MusicVolumeKey, volume);
     audioSource.volume = AudioVolumeUtility.SliderToSourceVolume(savedVolume);
   }
 
+  // Helper method to set the audio clip and play it if it's not already playing, ensuring that the music starts immediately when a new clip is assigned.
   void SetClipAndPlay(AudioClip clip)
   {
     if (audioSource == null || clip == null)

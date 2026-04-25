@@ -19,7 +19,7 @@ public class SettingsMenu : MonoBehaviour
   {
     HideSettingsPanel();
   }
-
+  // Initializes the settings menu by hiding the settings panel and loading the saved preferences for music volume, SFX volume, and fullscreen mode. It also applies these settings to the audio system and screen configuration to ensure that the user's preferences are reflected when they open the settings menu.
   void Start()
   {
     HideSettingsPanel();
@@ -45,12 +45,14 @@ public class SettingsMenu : MonoBehaviour
     ApplyFullscreen(savedFullscreen == 1);
   }
 
+  // Opens the settings panel, allowing the player to adjust audio and display settings. This method is typically called when the player clicks on a "Settings" button in the main menu, providing access to the various options for customizing their gaming experience.
   public void OpenSettings()
   {
     if (settingsPanel != null)
       settingsPanel.SetActive(true);
   }
 
+  // Closes the settings panel, hiding it from view and allowing the player to return to the main menu or previous screen without making changes to the settings.
   public void CloseSettings()
   {
     HideSettingsPanel();
@@ -74,6 +76,7 @@ public class SettingsMenu : MonoBehaviour
     Debug.Log("SFX Volume: " + value.ToString("F2") + " Applied: " + AudioVolumeUtility.SliderToSourceVolume(value).ToString("F2"));
   }
 
+  // Sets the fullscreen mode based on the user's choice, saving the preference in PlayerPrefs and applying the appropriate screen settings to ensure the game displays correctly in both fullscreen and windowed modes.
   public void SetFullscreen(bool isFullscreen)
   {
     PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
@@ -82,6 +85,7 @@ public class SettingsMenu : MonoBehaviour
     ApplyFullscreen(isFullscreen);
   }
 
+  // Applies the fullscreen setting based on the user's choice, adjusting the screen resolution and mode accordingly to ensure the game displays correctly in both fullscreen and windowed modes.
   void ApplyFullscreen(bool isFullscreen)
   {
     if (isFullscreen)
@@ -106,6 +110,7 @@ public class SettingsMenu : MonoBehaviour
     Screen.SetResolution(windowedWidth, windowedHeight, false);
   }
 
+  // Determines the appropriate window size for portrait mode based on the current display resolution, ensuring that the game maintains a 9:16 aspect ratio while fitting within the screen dimensions.
   void SetPortraitWindowSize()
   {
     Resolution displayResolution = Screen.currentResolution;
