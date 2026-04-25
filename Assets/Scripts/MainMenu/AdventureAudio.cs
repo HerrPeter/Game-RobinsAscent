@@ -10,7 +10,6 @@ public class AdventureAudio : MonoBehaviour
   public float volume = 0.2f;
 
   private AudioSource audioSource;
-  private float sampleRate = 44100f;
 
   void Awake()
   {
@@ -32,7 +31,7 @@ public class AdventureAudio : MonoBehaviour
     audioSource.loop = true;
     audioSource.playOnAwake = true;
     ApplySavedVolume();
-    SetClipAndPlay(musicClip != null ? musicClip : CreateTone());
+    SetClipAndPlay(musicClip);
   }
 
   void Start()
@@ -50,13 +49,13 @@ public class AdventureAudio : MonoBehaviour
       return;
     }
 
-    instance.audioSource.volume = Mathf.Clamp01(value);
+    instance.audioSource.volume = AudioVolumeUtility.SliderToSourceVolume(value);
   }
 
   void ApplySavedVolume()
   {
     float savedVolume = PlayerPrefs.GetFloat(MusicVolumeKey, volume);
-    audioSource.volume = Mathf.Clamp01(savedVolume);
+    audioSource.volume = AudioVolumeUtility.SliderToSourceVolume(savedVolume);
   }
 
   void SetClipAndPlay(AudioClip clip)
@@ -75,26 +74,5 @@ public class AdventureAudio : MonoBehaviour
     {
       audioSource.Play();
     }
-  }
-
-  AudioClip CreateTone()
-  {
-    int length = (int)sampleRate * 2;
-    float[] data = new float[length];
-
-    float[] melody = { 440f, 523f, 659f, 523f }; // simple “adventure” notes
-
-    for (int i = 0; i < length; i++)
-    {
-      float t = (float)i / sampleRate;
-      float note = melody[(i / (length / melody.Length)) % melody.Length];
-
-      data[i] = Mathf.Sin(2 * Mathf.PI * note * t) * 0.3f;
-    }
-
-    AudioClip clip = AudioClip.Create("AdventureLoop", length, 1, (int)sampleRate, false);
-    clip.SetData(data, 0);
-
-    return clip;
   }
 }

@@ -63,7 +63,7 @@ public class SettingsMenu : MonoBehaviour
 
     AdventureAudio.SetMusicVolume(value);
 
-    Debug.Log("Music Volume: " + value.ToString("F2"));
+    Debug.Log("Music Volume: " + value.ToString("F2") + " Applied: " + AudioVolumeUtility.SliderToSourceVolume(value).ToString("F2"));
   }
 
   public void SetSFXVolume(float value)
@@ -71,7 +71,7 @@ public class SettingsMenu : MonoBehaviour
     PlayerPrefs.SetFloat("SFXVolume", value);
     PlayerPrefs.Save();
 
-    Debug.Log("SFX Volume: " + value.ToString("F2"));
+    Debug.Log("SFX Volume: " + value.ToString("F2") + " Applied: " + AudioVolumeUtility.SliderToSourceVolume(value).ToString("F2"));
   }
 
   public void SetFullscreen(bool isFullscreen)
