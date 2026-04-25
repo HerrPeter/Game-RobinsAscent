@@ -449,9 +449,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.41416493
     y: 0
-    width: 1
+    width: 0.17167015
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -2029,7 +2029,7 @@ Canvas:
   m_GameObject: {fileID: 1468760707}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 215657129}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
